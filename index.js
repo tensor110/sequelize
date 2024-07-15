@@ -46,7 +46,7 @@ const User = sequelize.define('user', {
 // To delete User table 
 // User.drop();
 
-User.sync({alter: true})     //force : true-> drps the previous if exists and create new table,    alter: true -> Perform changes in the table to match the model  
+User.sync({alter: true})     //force : true-> drops the previous if exists and create new table,    alter: true -> Perform changes in the table to match the model  
     .then((data)=>{
         console.log("User added to database")
     })

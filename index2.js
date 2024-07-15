@@ -39,7 +39,7 @@ const User = sequelize.define('user', {
     timestamps: false  // It prevent the auto creation of created At & updated At
 })
 
-User.sync({alter: true})     //force : true-> drps the previous if exists and create new table,    alter: true -> Perform changes in the table to match the model
+User.sync({alter: true})
     .then(()=>{
         // Insert values to table 
         // const user = User.build({username: 'Ram', password: '123', age: 25, WittCodeRocks: true});

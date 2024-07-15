@@ -1,6 +1,6 @@
 // Model Querying
 const Sequelize = require('sequelize')
-const {DataTypes} = Sequelize;
+const {DataTypes, Op} = Sequelize;
 
 const sequelize = new Sequelize('sequelize-tut', 'root', 'Lucky@1201', {
     dialect: 'mysql',
@@ -39,52 +39,34 @@ const User = sequelize.define('user', {
     timestamps: false  // It prevent the auto creation of created At & updated At
 })
 
-User.sync({alter: true})     //force : true-> drps the previous if exists and create new table,    alter: true -> Perform changes in the table to match the model
+User.sync({alter: true})
     .then(()=>{
-        // Insert values to table 
-        // const user = User.build({username: 'Ram', password: '123', age: 25, WittCodeRocks: true});
-        // return user.save();
+        // return User.findAll();    //To find all attributes 
+        // return User.findAll({ attributes: ['username', 'password']});    //To find selected attributes 
+        // return User.findAll({ attributes: { exclude: ['password']}});    //To find all attributes excluding selected attributes 
+        // return User.findAll({ attributes: [['username', 'myName'], ['password', 'pwd']]});    //To find selected attributes username as myName and password as pwd 
+        // return User.findAll({ attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'totalage']]});    //To use aggregate functions 
+        // return User.findAll({ attributes: ['username', 'password'], where: {age: 25, username: 'Ram'}});    //Using where clause
+        // return User.findAll({ limit:2 });    //Using limit
+        // return User.findAll({ order: [['age', 'DESC']] });    //Using order by
+        // return User.findAll({ attributes: ['username', [sequelize.fn('SUM', sequelize.col('age')), 'totalage']], group: 'username' });    //Using group by
+        // return User.findAll({ where: {[Op.or]: {username: 'Ram', age: 26}} });    //Using operator
+        // return User.findAll({ where: { age: {[Op.gt]: 25}} });    //Using comparisons
+        // return User.findAll({ where: sequelize.where(sequelize.fn('char_length', sequelize.col('username')), 4) });    //finding len(username)==6
 
-        // or 
+        // return User.update({ username: 'pizzas'}, {where:{age: 25}})  //Update
 
-        // return User.create({
-        //     username: 'Shyam',
-        //     password: '1234',
-        //     age: 26,
-        //     WittCodeRocks: false
-        // })
+        // return User.destroy({where: { username: 'pizzas'}})  //Delete
 
-        // To create multiple users 
-        return User.bulkCreate([
-            {
-                username: 'Gopal',
-                age: 29,
-                password: '4321'
-            },
-            {
-                username: 'Radhe',
-                age: 31,
-                password: '123456'
-            },
-        ], { validate: true});
+        // Some methods 
+        return User.max('age') 
+        return User.sum('age') 
     })
-    // .then((data)=>{
-        // console.log("User added to database")
-        // data.username = 'Hari';
-        // data.age = 54;
-        // return data.save();    // To update the data
-        // return data.save({fields: ['age']});    // To update a particular field of the data
-        // return data.destroy();    // To delete the data 
-        // return data.reload();      // To retrieve the previous data 
-        // data.decrement({ age: 2 })   // To increment/decrement value of a field 
-    // })
     .then((data)=>{
-        console.log("User updated")
-        // console.log(data.toJSON());     // For one user
-        // For multiple User 
-        data.forEach((element)=>{
-            console.log(element.toJSON())
-        })
+        // data.forEach((element)=>{
+        //     console.log(element.toJSON())
+        // })
+        console.log(data)
     })
     .catch((err)=>{
         console.log("Error syncing the table and model!", err)
